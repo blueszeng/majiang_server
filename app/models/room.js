@@ -1,44 +1,44 @@
+ "use strict";
 var exp = module.exports;
 var pomelo = require('pomelo');
 var constant = require('./constant');
 var User = require('./user');
 
-var rooms = {}
+var rooms = {};
 
 exp.getRooms = function () {
   return rooms;
-}
+};
 
-exp.addNewRoom = function (uid, rid) {
-
-}
+exp.addNewRoom = function (rid) {
+  exp.initRoom(rid);
+};
 
 exp.initRoom = function (rid, isReload) {
   isReload = isReload ? isReload : false;
-  local userList = [];
+  var userList = [];
   if (isReload && rooms[rid].userList) {
     userList = rooms[rid].userlist;
   }
-
   rooms[rid] = {
     rid : rid,
-    sid : sid,
+    sid : 0,
     status : constant.ROOM_STATUS.WAITING,
     userList : []
-  }
+  };
   if (isReload && userList) {
     rooms[rid].userList = userList;
   }
-}
+};
 
 exp.getRoom = function (rid) {
-  room = rooms[rid];
+  var room = rooms[rid];
   if (room && room.rid === rid) {
     return room;
   }
-}
+};
 
-updateRoomData = function (rid, data) {
+exp.updateRoomData = function (rid, data) {
   var room = exp.getRoom(rid);
   if (room === undefined) {
     return -1;  //没找到房间
@@ -52,18 +52,18 @@ updateRoomData = function (rid, data) {
     }
   }
   return 0;
-}
+};
 
 exp.addUserToRoom = function (sid, rid, uid) {
-  room = getRoom(rid);
+  var room = exp.getRoom(rid);
   if (room === undefined) {
     return -1;
   }
   var currentUserCnt = room.userList;
-  if (currentUserCnt) >= constant.ROOM_CONF.maxUserCount) {
+  if (currentUserCnt >= constant.ROOM_CONF.maxUserCount) {
     return -2;
   }
-  seatid = getSeatid(room, uid);
+  var seatid = exp.getSeatid(room, uid);
   if (seatid > 0) {
     return seatid;
   }
@@ -83,7 +83,7 @@ exp.addUserToRoom = function (sid, rid, uid) {
     channel.add(uid, sid);
   }
   return seatid;
-}
+};
 
 exp.delRoomUser = function (sid, rid, uid) {
   var room = exp.getRoom(rid);
@@ -107,10 +107,10 @@ exp.delRoomUser = function (sid, rid, uid) {
     channel.leave(uid, sid);
   }
   return index;
-}
+};
 
 exp.getRoomUserCount = function (rid) {
-  var room = getRoom(rid);
+  var room = exp.getRoom(rid);
   var count = 0;
   if (room === undefined) {
     return count;
@@ -119,10 +119,10 @@ exp.getRoomUserCount = function (rid) {
     count = room.userList.length;
   }
   return count;
-}
+};
 
 exp.getRoomUserReadyCount = function (rid) {
-  var room = getRoom(rid);
+  var room = exp.getRoom(rid);
   var count = 0;
   if (room === undefined) {
     return count;
@@ -136,33 +136,32 @@ exp.getRoomUserReadyCount = function (rid) {
     }
   }
   return count;
-}
+};
 
 exp.getRoomStatus = function (rid) {
-  var room = getRoom(rid);
+  var room = exp.getRoom(rid);
   if (room === undefined) {
     return -1;
   }
   return room.status;
-}
+};
 
 exp.setRoomStatus = function (rid, status) {
-  var room = getRoom(rid);
+  var room = exp.getRoom(rid);
   if (room === undefined) {
     return false;
   }
   room.status = status;
   return true;
-}
+};
 
 exp.getNextUser = function (rid, uid) {
   var nextIndex = 0;
-  var nextUser = undefined;
-  var room = getRoom(rid);
+  var nextUser;
+  var room = exp.getRoom(rid);
   if (room === undefined) {
     return false;
   }
-
   var index = room.userList.indexOf(uid);
   if (index !== -1) {
     nextIndex = index % constant.ROOM_CONF.maxUserCount + 1;
@@ -171,13 +170,13 @@ exp.getNextUser = function (rid, uid) {
     }
   }
   return nextUser;
-}
+};
 
 exp.getSeatid = function (room, uid) {
   if (room === undefined) {
     return -1;
   }
-  var user = undefined;
+  var user;
   if (~room.userList.indexOf(uid)) {
     user = User.getUserByUid(uid);
     if (user && user.rid === room.rid) {
@@ -185,13 +184,12 @@ exp.getSeatid = function (room, uid) {
     }
   }
   return 0;
-}
+};
 
 exp.getUidInSeat = function (room, seatid) {
   if (room === undefined) {
     return -1;
   }
-  var user = undefined;
   for (var i in room.userList) {
     var user = User.getUserByUid(room.userList[i]);
     if (user && user.seatid === seatid) {
@@ -199,4 +197,4 @@ exp.getUidInSeat = function (room, seatid) {
     }
   }
   return 0;
-}
+};

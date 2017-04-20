@@ -7,10 +7,11 @@ exp.getUsers = function () {
 
 exp.addUser = function (user) {
   if (!(user && user.uid)) {
-    return false;
+    return false
   }
   if (users[user.uid]) {
     return false;
+
   }
   user[user.uid] = user;
   return true;

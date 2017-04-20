@@ -1,4 +1,6 @@
+"use strict";
 var pomelo = require('pomelo');
+var route = require('./app/util/route');
 
 /**
  * Init app for client.
@@ -17,6 +19,19 @@ app.configure('production|development', 'connector', function(){
     });
 });
 
+
+// Configure database
+app.configure('production|development', 'char|auth|connector|master', function() {
+	var dbclient = require('./app/daos/mysql').init(app);
+	app.set('dbclient', dbclient);
+  // app.use(sync, {sync: {path:__dirname + '/app/dao/mapping', dbclient: dbclient}});
+});
+
+app.configure('production|development', function() {
+  app.route('chat', route.chatRoute);
+  app.loadConfig('mysql', app.getBase() + '/../shared/config/mysql.json');
+  app.filter(pomelo.filter.timeout());
+});
 // start app
 app.start();
 
