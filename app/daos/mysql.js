@@ -1,6 +1,6 @@
 "use strict";
 var sqlClient = module.exports;
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 var pool;
 var Mysql = {};
 Mysql.init = function (app) {

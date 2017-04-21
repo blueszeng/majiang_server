@@ -1,6 +1,6 @@
 "use strict";
 var pomelo = require('pomelo');
-var route = require('./app/util/route');
+var route = require('./app/utils/route');
 
 /**
  * Init app for client.

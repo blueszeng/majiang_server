@@ -6,7 +6,7 @@ var app = {
   }
 };
 var db = require('./app/daos/mysql').init(app);
-db.query("select * from user", [])
+db.query("select * from users", [])
 .then(function(value) {
   console.log(value);
 }).catch(function(err) {

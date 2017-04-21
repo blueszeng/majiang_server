@@ -7,7 +7,6 @@ var createPool = function (app) {
     return genericPool.createPool({
       create: function() {
     	 return new Promise(function(resolve) {
-          // console.log(mysqlConfig);
           var client = mysql.createConnection({
     				host: mysqlConfig.host,
     				user: mysqlConfig.user,
