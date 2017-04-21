@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 var mysql = require('mysql');
 var genericPool = require('generic-pool');
 var Promise = require("bluebird");
 var createPool = function (app) {
-    var mysqlConfig = app.get('mysql').development;
+    var mysqlConfig = app.get('mysql');
     return genericPool.createPool({
       create: function() {
     	 return new Promise(function(resolve) {
@@ -17,14 +17,14 @@ var createPool = function (app) {
             if (err) {
               return console.error(err);
             }
-            console.log('connect--->');
+            console.log('connect mysql ...');
           });
           resolve(client);
         });
       },
       destroy: function(client) {
           return new Promise(function(resolve) {
-              console.log('destroy--->');
+              console.log('destroy mysql connect...');
               resolve(client.end());
           });
       }

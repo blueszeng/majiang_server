@@ -1,0 +1,8 @@
+{
+	"development": {
+	  "url" : "redis://127.0.0.1/0"
+	},
+	"production": {
+	  "url" : "redis://127.0.0.1/1"
+	}
+}

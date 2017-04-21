@@ -1,6 +1,7 @@
- "use strict";
+ 'use strict';
 var exp = module.exports;
 var pomelo = require('pomelo');
+var logger = require('pomelo-logger').getLogger(__filename);
 var constant = require('./constant');
 var User = require('./user');
 

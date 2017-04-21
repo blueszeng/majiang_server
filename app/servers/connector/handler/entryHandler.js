@@ -1,3 +1,8 @@
+'use strict';
+var Code = require('../../../../shared/code');
+var userDao = require('../../../dao/userDao');
+var Promise = require('bluebird');
+var logger = require('pomelo-logger').getLogger(__filename);
 module.exports = function(app) {
   return new Handler(app);
 };
@@ -15,12 +20,73 @@ var Handler = function(app) {
  * @return {Void}
  */
 
-Handler.prototype.tt = {};
-Handler.prototype.tt.entry = function(msg, session, next) {
-  console.log('zzzzzz');
-  next(null, {code: 200, msg: 'game server is ok.'});
+Handler.prototype.entry = function(msg, session, next) {
+  var token = msg.token;
+  var self = this;
+  var app = self.app;
+  if (!token) {
+    next(new Error('invalid entry request: empty token'), {code: Code.FAIL});
+    return;
+	}
+  var uid, players, player;
+  var auth = Promise.promisify(app.rpc.auth.authRemote.auth,
+     {context: app.rpc.auth.authRemote});
+  Promise.resolve(auth(session, token))
+  .then(function (code, user) {
+    if(code !== Code.OK) {
+      next(null, {code : code});
+      return;
+    }
+    if(!user) {
+				next(null, {code: Code.ENTRY.FA_USER_NOT_EXIST});
+				return;
+		}
+    uid = user.id;
+    return userDao.getPlayersByUid(user.id);
+  }).then(function (res) {
+      players = res;
+      var kick = Promise.promisify(app.get('sessionService').kick,
+         {context: app.get('sessionService')});
+      return kick(uid);
+  }).then(function () {
+    var bind = Promise.promisify(session.bind,{context: session});
+    return bind(uid);
+  }).then(function () {
+    if(!players || players.length === 0) {
+				next(null, {code: Code.OK});
+				return;
+			}
+    player = players[0];
+		session.set('serverId', self.app.get('areaIdMap')[player.areaId]);
+		session.set('playername', player.name);
+		session.set('playerId', player.id);
+		session.on('closed', onUserLeave.bind(null, self.app));
+    var pushAll = Promise.promisify(session.bind,{context: session});
+		return pushAll();
+  }).then(function () {
+    var add = Promise.promisify(app.rpc.chat.chatRemote.add, {context: app.rpc.chat.chatRemote});
+    return add(session, player.userId, player.name, 'zzzzz');
+  }).then(function () {
+    next(null, {code: Code.OK, player: players ? players[0] : null});
+  }).catch(function (err) {
+    next(err, {code: Code.FAIL});
+  });
 };
-console.log('Handler.prototype.tt.entry')
+
+
+var onUserLeave = function (app, session, reason) {
+	if(!session || !session.uid) {
+		return;
+	}
+
+	// utils.myPrint('1 ~ OnUserLeave is running ...');
+	// app.rpc.area.playerRemote.playerLeave(session, {playerId: session.get('playerId'), instanceId: session.get('instanceId')}, function(err){
+	// 	if(!!err){
+	// 		logger.error('user leave error! %j', err);
+	// 	}
+	// });
+	// app.rpc.chat.chatRemote.kick(session, session.uid, null);
+};
 
 /**
  * Publish route for mqtt connector.
