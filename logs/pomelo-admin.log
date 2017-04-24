@@ -19,3 +19,29 @@
 [2017-04-21 09:54:13.486] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 3005
 [2017-04-21 09:54:13.510] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 3005
 [2017-04-21 09:54:14.001] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 3005
+[2017-04-22 22:38:21.422] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 3005
+[2017-04-22 22:38:21.534] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 3005
+[2017-04-22 22:38:22.407] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "gate", "127.0.0.1", 3005
+[2017-04-22 22:38:22.450] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 3005
+[2017-04-22 22:38:22.520] [ERROR] pomelo-admin - [31m[MonitorAgent] [39mserver "room-server-1" "room" register master failed
+[2017-04-22 22:38:22.522] [ERROR] pomelo-admin - [31m[MqttClient] [39mmqtt socket is disconnect, remote server host: 127.0.0.1, port: 3005
+[2017-04-22 22:38:22.528] [ERROR] pomelo-admin - [31m[MonitorAgent] [39mserver "gate-server-1" "gate" register master failed
+[2017-04-22 22:38:22.529] [ERROR] pomelo-admin - [31m[MqttClient] [39mmqtt socket is disconnect, remote server host: 127.0.0.1, port: 3005
+[2017-04-22 22:38:22.448] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "hall", "127.0.0.1", 3005
+[2017-04-22 22:38:22.556] [ERROR] pomelo-admin - [31m[MonitorAgent] [39mserver "hall-server-1" "hall" register master failed
+[2017-04-22 22:38:22.557] [ERROR] pomelo-admin - [31m[MqttClient] [39mmqtt socket is disconnect, remote server host: 127.0.0.1, port: 3005
+[2017-04-22 22:38:22.563] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "room", "127.0.0.1", 3005
+[2017-04-22 22:38:22.626] [ERROR] pomelo-admin - [31m[MonitorAgent] [39mserver "room-server-2" "room" register master failed
+[2017-04-22 22:38:22.627] [ERROR] pomelo-admin - [31m[MqttClient] [39mmqtt socket is disconnect, remote server host: 127.0.0.1, port: 3005
+[2017-04-22 22:38:23.529] [INFO] pomelo-admin - [32m[MqttClient] [39mreconnect delay 1 s
+[2017-04-22 22:38:23.534] [INFO] pomelo-admin - [32m[MqttClient] [39mreconnect delay 1 s
+[2017-04-22 22:38:23.540] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mrepush qos message {"1":{"moduleId":"__monitorwatcher__","msg":{"action":"replaceServer","servers":{"room-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"room-server-1","host":"127.0.0.1","port":3190,"clientHost":"127.0.0.1","serverType":"room"}}}}}
+[2017-04-22 22:38:23.554] [WARN] pomelo-admin - [33m[MasterSocket] [39munknown resp id:1
+[2017-04-22 22:38:23.555] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mrepush qos message {"3":{"moduleId":"__monitorwatcher__","msg":{"action":"replaceServer","servers":{"room-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"room-server-1","host":"127.0.0.1","port":3190,"clientHost":"127.0.0.1","serverType":"room"},"gate-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"gate-server-1","host":"127.0.0.1","port":3150,"clientHost":"127.0.0.1","clientPort":3010,"frontend":"true","serverType":"gate"}}}}}
+[2017-04-22 22:38:23.563] [INFO] pomelo-admin - [32m[MqttClient] [39mreconnect delay 1 s
+[2017-04-22 22:38:23.572] [WARN] pomelo-admin - [33m[MasterSocket] [39munknown resp id:3
+[2017-04-22 22:38:23.574] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mrepush qos message {"6":{"moduleId":"__monitorwatcher__","msg":{"action":"replaceServer","servers":{"room-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"room-server-1","host":"127.0.0.1","port":3190,"clientHost":"127.0.0.1","serverType":"room"},"gate-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"gate-server-1","host":"127.0.0.1","port":3150,"clientHost":"127.0.0.1","clientPort":3010,"frontend":"true","serverType":"gate"},"hall-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"hall-server-1","host":"127.0.0.1","port":3180,"clientHost":"127.0.0.1","serverType":"hall"}}}}}
+[2017-04-22 22:38:23.595] [WARN] pomelo-admin - [33m[MasterSocket] [39munknown resp id:6
+[2017-04-22 22:38:23.633] [INFO] pomelo-admin - [32m[MqttClient] [39mreconnect delay 1 s
+[2017-04-22 22:38:23.641] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mrepush qos message {"10":{"moduleId":"__monitorwatcher__","msg":{"action":"replaceServer","servers":{"room-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"room-server-1","host":"127.0.0.1","port":3190,"clientHost":"127.0.0.1","serverType":"room"},"gate-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"gate-server-1","host":"127.0.0.1","port":3150,"clientHost":"127.0.0.1","clientPort":3010,"frontend":"true","serverType":"gate"},"hall-server-1":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"hall-server-1","host":"127.0.0.1","port":3180,"clientHost":"127.0.0.1","serverType":"hall"},"room-server-2":{"main":"/Users/zyg/Project/majiang_server/game-server/app.js","env":"development","id":"room-server-2","host":"127.0.0.1","port":3191,"clientHost":"127.0.0.1","serverType":"room"}}}}}
+[2017-04-22 22:38:23.657] [WARN] pomelo-admin - [33m[MasterSocket] [39munknown resp id:10

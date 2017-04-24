@@ -45,7 +45,7 @@ app.configure('production|development', 'char|auth|connector|master', function()
 	var mysqlDb = require('./app/daos/mysql/mysql').init(app);
 	app.set('mysqlDb', mysqlDb);
   // redis
-  var redisCache = require('./app/daos/mysql/redis').init(app);
+  var redisCache = require('./app/daos/redis/redis').init(app);
   app.set('redisCache', redisCache);
   // app.use(sync, {sync: {path:__dirname + '/app/dao/mapping', dbclient: dbclient}});
 });

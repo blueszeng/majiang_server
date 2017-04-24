@@ -1,5 +1,7 @@
 'use strict';
-var utils = module.exports;
+var util = module.exports;
+var Promise = require('bluebird');
+
 
 // control variable of func "myPrint"
 var isPrintFlag = false;
@@ -8,7 +10,7 @@ var isPrintFlag = false;
 /**
  * Check and invoke callback function
  */
-utils.invokeCallback = function(cb) {
+util.invokeCallback = function(cb) {
   if(!!cb && typeof cb === 'function') {
     cb.apply(null, Array.prototype.slice.call(arguments, 1));
   }
@@ -17,7 +19,7 @@ utils.invokeCallback = function(cb) {
 /**
  * clone an object
  */
-utils.clone = function(origin) {
+util.clone = function(origin) {
   if(!origin) {
     return;
   }
@@ -31,7 +33,7 @@ utils.clone = function(origin) {
   return obj;
 };
 
-utils.size = function(obj) {
+util.size = function(obj) {
   if(!obj) {
     return 0;
   }
@@ -67,7 +69,34 @@ function getLineNumber(stack){
   return stack[1].getLineNumber();
 }
 
-utils.myPrint = function() {
+util.rpcFuncPromisify = function (func, self) {
+   return function () {
+    var args = [];
+    var len = arguments.length;
+    for(var i = 0; i < len; i++) {
+      args.push(arguments[i]);
+    }
+    return new Promise (function (resolve, reject) {
+      var onCallBack = function(err, result) {
+        if (!!err) {
+          return reject(err);
+        }
+        if (arguments.length >= 3) {  //RPC 回调返回参数超过 3个 就返回一个数组
+          var arryRes = [];
+          for(var i = 1; i < arguments.length; i++) {
+            arryRes.push(arguments[i]);
+          }
+          return resolve(arryRes);
+        }
+        resolve(result);
+      };
+      args.push(onCallBack);
+      func.apply(self, args);
+    });
+  };
+};
+
+util.myPrint = function() {
   if (isPrintFlag) {
     var len = arguments.length;
     if(len <= 0) {

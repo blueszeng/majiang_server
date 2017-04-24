@@ -1,7 +1,7 @@
 'use strict';
 var Code = require('../../../../shared/code');
 var userDao = require('../../../dao/userDao');
-var Promise = require('bluebird');
+var utils = require('../../utils/util');
 var logger = require('pomelo-logger').getLogger(__filename);
 module.exports = function(app) {
   return new Handler(app);
@@ -29,42 +29,41 @@ Handler.prototype.entry = function(msg, session, next) {
     return;
 	}
   var uid, players, player;
-  var auth = Promise.promisify(app.rpc.auth.authRemote.auth,
-     {context: app.rpc.auth.authRemote});
-  Promise.resolve(auth(session, token))
-  .then(function (code, user) {
-    if(code !== Code.OK) {
-      next(null, {code : code});
+  var auth = utils.rpcFuncPromisify(app.rpc.auth.authRemote.auth, app.rpc.auth.authRemote);
+  auth(session, token)
+  .then(function (result) {
+    if(result.code !== Code.OK) {
+      next(null, { code : result.code });
       return;
     }
-    if(!user) {
-				next(null, {code: Code.ENTRY.FA_USER_NOT_EXIST});
-				return;
+    if(!result.code) {
+			next(null, {code: Code.ENTRY.FA_USER_NOT_EXIST});
+			return;
 		}
+    var user = result.user;
     uid = user.id;
     return userDao.getPlayersByUid(user.id);
   }).then(function (res) {
-      players = res;
-      var kick = Promise.promisify(app.get('sessionService').kick,
-         {context: app.get('sessionService')});
-      return kick(uid);
+    players = res;
+    var kick = utils.rpcFuncPromisify(app.get('sessionService').kick, app.get('sessionService'));
+    return kick(uid);
   }).then(function () {
-    var bind = Promise.promisify(session.bind,{context: session});
+    var bind = utils.rpcFuncPromisify(session.bind, session);
     return bind(uid);
   }).then(function () {
     if(!players || players.length === 0) {
 				next(null, {code: Code.OK});
 				return;
-			}
+		}
     player = players[0];
 		session.set('serverId', self.app.get('areaIdMap')[player.areaId]);
 		session.set('playername', player.name);
 		session.set('playerId', player.id);
 		session.on('closed', onUserLeave.bind(null, self.app));
-    var pushAll = Promise.promisify(session.bind,{context: session});
+    var pushAll = utils.rpcFuncPromisify(session.bind, session);
 		return pushAll();
   }).then(function () {
-    var add = Promise.promisify(app.rpc.chat.chatRemote.add, {context: app.rpc.chat.chatRemote});
+    var add = utils.rpcFuncPromisify(app.rpc.chat.chatRemote.add, app.rpc.chat.chatRemote);
     return add(session, player.userId, player.name, 'zzzzz');
   }).then(function () {
     next(null, {code: Code.OK, player: players ? players[0] : null});

@@ -29,17 +29,20 @@ var pro = Remote.prototype;
 pro.auth = function (token, cb) {
 	var res = tokenService.parse(token, this.secret);
 	if(!res) {
-		cb(null, Code.ENTRY.FA_TOKEN_ILLEGAL);
+		cb(null, { code: Code.ENTRY.FA_TOKEN_ILLEGAL });
 		return;
 	}
 
 	if(!checkExpire(res, this.expire)) {
-		cb(null, Code.ENTRY.FA_TOKEN_EXPIRE);
+		cb(null, { code: Code.ENTRY.FA_TOKEN_EXPIRE });
 		return;
 	}
 
   userDao.getUserById(res.uid).then(function (user) {
-    cb(null, Code.OK, user);
+    cb(null, {
+			code: Code.OK,
+			user: user
+		});
   }).catch(function (err) {
     cb(err);
   });
