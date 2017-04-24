@@ -5,15 +5,15 @@ var Promise = require("bluebird");
 var createPool = function (app) {
     var mysqlConfig = app.get('mysql');
     return genericPool.createPool({
-      create: function() {
-    	 return new Promise(function(resolve) {
+      create: function () {
+    	 return new Promise(function (resolve) {
           var client = mysql.createConnection({
     				host: mysqlConfig.host,
     				user: mysqlConfig.user,
     				password: mysqlConfig.password,
     				database: mysqlConfig.database
     			});
-          client.connect(function(err) {
+          client.connect(function (err) {
             if (err) {
               return console.error(err);
             }
@@ -22,7 +22,7 @@ var createPool = function (app) {
           resolve(client);
         });
       },
-      destroy: function(client) {
+      destroy: function (client) {
           return new Promise(function(resolve) {
               console.log('destroy mysql connect...');
               resolve(client.end());

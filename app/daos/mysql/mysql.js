@@ -53,7 +53,7 @@ Mysql.shutdown = function () {
 /**
  * init database
  */
-sqlClient.init = function(app) {
+sqlClient.init = function (app) {
 	if (!!pool) {
 		return sqlClient;
 	}
